@@ -8,13 +8,13 @@ During development you often change your Perl code, saved in `.psgi` or `.pm` fi
 
 So there's an option to watch for changes to files under your working directory and reload the application as needed: `-r` (or `--reload`).
 
-```
+```console
 plackup -r hello.psgi
 ```
 
 It will watch files under the current directory by default, but you can change it to watch additional locations by using the `-R` option (note the uppercase).
 
-```
+```console
 plackup -R lib,/path/to/scripts hello.psgi
 ```
 
@@ -34,16 +34,16 @@ Plack now has the Shotgun loader, inspired by [Rack's shotgun](http://github.com
 
 Using the Shotgun loader is easy:
 
-```
-> plackup -L Shotgun myapp.psgi
+```console
+plackup -L Shotgun myapp.psgi
 ```
 
 This will delay the compilation of your application to runtime. When a request is received it will fork off a new child process to compile your app and return the PSGI response over the pipe. You can also preload modules in the parent process that are not likely to be updated to reduce the time needed to compile your application.
 
 For instance, if your application uses Moose and DBIx::Class then use the following options:
 
-```
-> plackup -MMoose -MDBIx::Class -L Shotgun myapp.psgi
+```console
+plackup -MMoose -MDBIx::Class -L Shotgun myapp.psgi
 ```
 
 This speeds up the time required to compile your application in the runtime.

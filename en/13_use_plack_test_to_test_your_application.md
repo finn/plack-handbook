@@ -75,7 +75,7 @@ test_psgi ... # the same code
 
 By using the environment variable, you don't really need to change the .t code:
 
-```
+```console
 env PLACK_TEST_IMPL=Server prove -l t/test.t
 ```
 

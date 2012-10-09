@@ -25,8 +25,8 @@ my $app = CGI::Emulate::PSGI->handler($sub);
 
 There's also [Plack::App::CGIBin](http://search.cpan.org/perldoc?Plack::App::CGIBin) Plack application to run existing CGI scripts written in Perl as PSGI applications, suppose you have bunch of CGI scripts in `/path/to/cgi-bin`, you'll run the server with:
 
-```
-> plackup -MPlack::App::CGIBin -e 'Plack::App::CGIBin->new(root => "/path/to/cgi-bin"))'
+```console
+plackup -MPlack::App::CGIBin -e 'Plack::App::CGIBin->new(root => "/path/to/cgi-bin"))'
 ```
 
 And that will mount the path `/path/to/cgi-bin`, so suppose you have `foo.pl` in that directory, you can access http://localhost:5000/foo.pl to run the CGI application as a PSGI over the plackup, just like the scripts running on Apache mod_perl Registry mechanism.

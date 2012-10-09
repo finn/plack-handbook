@@ -8,8 +8,8 @@ We have [an awesome stack trace](http://advent.plackperl.org/2009/12/day-3-using
 
 Try this code:
 
-```
-> plackup -e 'sub { return [ 0, {"Content-Type","text/html"}, "Hello" ] }'
+```console
+plackup -e 'sub { return [ 0, {"Content-Type","text/html"}, "Hello" ] }'
 ```
 
 Again, writing a raw PSGI interface is not something end users would do every day, but this could be a good emulation of what would happen if there's a bug in one of middleware components or framework adapters itself.
@@ -28,8 +28,8 @@ Checking them in the individual server for every request at a run time is *possi
 
 Middleware::Lint is the middleware to validate request and response interface. Run the application above with the middleware:
 
-```
-> plackup -e 'enable "Lint"; sub { return [ 0, { "Content-Type"=>"text/html" }, ["Hello"] ] }'
+```console
+plackup -e 'enable "Lint"; sub { return [ 0, { "Content-Type"=>"text/html" }, ["Hello"] ] }'
 ```
 
 and now requests for the application would give a nice stack trace saying:

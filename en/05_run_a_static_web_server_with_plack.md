@@ -15,16 +15,16 @@ my $app = Plack::App::File->new(root => "$ENV{HOME}/public_html");
 
 and run it with plackup:
 
-```
-> plackup file.psgi
+```console
+plackup file.psgi
 ```
 
 Now you can access any file under your `~/public_html` with the URL http://localhost:5000/somefile.html
 
 You can also use Plack::App::Directory. This time let's run it with just the plackup command without a .psgi file:
 
-```
-> plackup -MPlack::App::Directory \
+```console
+plackup -MPlack::App::Directory \
     -e 'Plack::App::Directory->new(root => "$ENV{HOME}/Sites");
 HTTP::Server::PSGI: Accepting connections at http://0:5000/
 ```

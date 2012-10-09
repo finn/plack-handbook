@@ -16,8 +16,8 @@ If you're curious how this really works, take a look at [the spec](http://www.re
 
 To use ReverseHTTP, install the required modules and run this:
 
-```
-> plackup -s ReverseHTTP -o yourhostname --token password \
+```console
+plackup -s ReverseHTTP -o yourhostname --token password \
     -e 'sub { [200, ["Content-Type","text/plain"], ["Hello"]] }'
 Public Application URL: http://yourhostname.www.reversehttp.net/
 ```
@@ -30,11 +30,11 @@ The console will display the address (URL) like seen, and open the URL from the 
 
 Of course because this is a PSGI server backend, you can use with *any* frameworks. Want to use it with Catalyst application?
 
-```
-> catalyst.pl MyApp
-> cd MyApp
-> ./scripts/myapp_create.pl PSGI
-> plackup -o yourhost --token password ./scripts/myapp.psgi
+```console
+catalyst.pl MyApp
+cd MyApp
+./scripts/myapp_create.pl PSGI
+plackup -o yourhost --token password ./scripts/myapp.psgi
 ```
 
 That's it! The default Catalyst application will now be accessible with the URL http://yourhost.reversehttp.net/ from anywhere in the world.

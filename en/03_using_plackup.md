@@ -4,7 +4,7 @@ In the [Day 2](http://advent.plackperl.org/2009/12/day-2-hello-world.html) artic
 
 plackup is a command line launcher of PSGI applications inspired by Rack's rackup command. It can be used to run any PSGI application saved in a .psgi file with one of the PSGI web server backends using Plack handlers. The usage is simple: just pass a .psgi file path to the command:
 
-```bash
+```console
 plackup hello.psgi
 HTTP::Server::PSGI: Accepting connections at http://0:5000/
 ```
@@ -20,13 +20,13 @@ The default backend is chosen using one of the following methods:
 
 You can also specify the backend yourself from the command line using the `-s` or `--server` switch:
 
-```bash
+```console
 plackup -s Starman hello.psgi
 ```
 
 By default the plackup command enables three middleware components to aid development: Lint, AccessLog, and StackTrace. You can disable them with the `-E` (or `--environment`) switch:
 
-```bash
+```console
 plackup -E production -s Starman hello.psgi
 ```
 
@@ -34,14 +34,14 @@ In the case that you really want to use the `development` Plack environment but 
 
 Other command line switches can be passed to the server. You can specify the server listen port with:
 
-```bash
+```console
 plackup -s Starlet --host 127.0.0.1 --port 8080 hello.psgi
 Plack::Handler::Starlet: Accepting connections at http://127.0.0.1:8080/
 ```
 
 or specify the unix domain socket the FCGI backend should listen on with:
 
-```bash
+```console
 plackup -s FCGI --listen /tmp/fcgi.sock app.psgi
 ```
 
