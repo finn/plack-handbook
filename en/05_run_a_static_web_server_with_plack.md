@@ -26,6 +26,9 @@ You can also use Plack::App::Directory. This time let's run it with just the pla
 ```console
 plackup -MPlack::App::Directory \
     -e 'Plack::App::Directory->new(root => "$ENV{HOME}/Sites");
+```
+
+```
 HTTP::Server::PSGI: Accepting connections at http://0:5000/
 ```
 
