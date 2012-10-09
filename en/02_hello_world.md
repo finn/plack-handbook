@@ -20,6 +20,11 @@ Save this code in a file named `hello.psgi` and then use the plackup command to 
 
 ```console
 plackup hello.psgi
+```
+
+It should output:
+
+```
 HTTP::Server::PSGI: Accepting connections at http://0:5000/
 ```
 

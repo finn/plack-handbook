@@ -28,10 +28,6 @@ plackup -MPlack::App::Directory \
     -e 'Plack::App::Directory->new(root => "$ENV{HOME}/Sites");
 ```
 
-```
-HTTP::Server::PSGI: Accepting connections at http://0:5000/
-```
-
 The plackup command, like the perl command, accepts flags like `-I` (include path), `-M` (modules to load), and `-e` (the code to eval), so it's easy to load these Plack::App::* applications without ever touching a .psgi file!
 
 There are a couple of other Plack::App applications in the Plack distribution.

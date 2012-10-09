@@ -6,7 +6,6 @@ plackup is a command line launcher of PSGI applications inspired by Rack's racku
 
 ```console
 plackup hello.psgi
-HTTP::Server::PSGI: Accepting connections at http://0:5000/
 ```
 
 You can actually omit the filename if you're trying to run the file named `app.psgi` in the current directory.
@@ -36,7 +35,6 @@ Other command line switches can be passed to the server. You can specify the ser
 
 ```console
 plackup -s Starlet --host 127.0.0.1 --port 8080 hello.psgi
-Plack::Handler::Starlet: Accepting connections at http://127.0.0.1:8080/
 ```
 
 or specify the unix domain socket the FCGI backend should listen on with:

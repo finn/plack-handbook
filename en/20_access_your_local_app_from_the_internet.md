@@ -19,6 +19,11 @@ To use ReverseHTTP, install the required modules and run this:
 ```console
 plackup -s ReverseHTTP -o yourhostname --token password \
     -e 'sub { [200, ["Content-Type","text/plain"], ["Hello"]] }'
+```
+
+It should output:
+
+```
 Public Application URL: http://yourhostname.www.reversehttp.net/
 ```
 
