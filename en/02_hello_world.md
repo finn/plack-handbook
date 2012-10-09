@@ -18,8 +18,8 @@ A PSGI application is a Perl subroutine reference (a coderef) and is usually ref
 
 Save this code in a file named `hello.psgi` and then use the plackup command to run it:
 
-```
-> plackup hello.psgi
+```console
+plackup hello.psgi
 HTTP::Server::PSGI: Accepting connections at http://0:5000/
 ```
 
