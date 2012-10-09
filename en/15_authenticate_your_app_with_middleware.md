@@ -18,36 +18,40 @@ Plack middleware allows web application frameworks to share such a functionality
 
 Just like [other middleware](http://advent.plackperl.org/2009/12/day-10-using-plack-middleware.html), using Auth::Basic middleware is quite simple:
 
-    use Plack::Builder;
-    
-    my $app = sub { ... };
-    
-    builder {
-        enable "Auth::Basic", authenticator => sub {
-            my($username, $password) = @_;
-            return $username eq 'admin' && $password eq 'foobar';
-        };
-        $app;
+```perl
+use Plack::Builder;
+
+my $app = sub { ... };
+
+builder {
+    enable "Auth::Basic", authenticator => sub {
+        my($username, $password) = @_;
+        return $username eq 'admin' && $password eq 'foobar';
     };
+    $app;
+};
+```
 
 This adds a basic authentication to your application `$app`, and the user *admin* can sign in with the password *foobar* and nobody else. The successful signed-in user gets `REMOTE_USER` set in PSGI `$env` hash so it can be used in the applications and is logged using the standard AccessLog middleware.
 
 Since it's a callback based, adding another authentication system such as Kerberos would be pretty trivial and easy with modules such as Authen::Simple:
 
-    use Plack::Builder;
-    use Authen::Simple;
-    use Authen::Simple::Kerberos;
+```perl
+use Plack::Builder;
+use Authen::Simple;
+use Authen::Simple::Kerberos;
 
-    my $auth = Authen::Simple->new(
-        Authen::Simple::Kerberos->new(realm => ...),
-    );
-    
-    builder {
-        enable "Auth::Basic", authenticator => sub {
-            $auth->authenticate(@_):
-        };
-        $app;
+my $auth = Authen::Simple->new(
+    Authen::Simple::Kerberos->new(realm => ...),
+);
+
+builder {
+    enable "Auth::Basic", authenticator => sub {
+        $auth->authenticate(@_):
     };
+    $app;
+};
+```
 
 The same way you can use lots of [Authen::Simple backends](http://search.cpan.org/search?query=authen+simple&mode=all) with small changes.
 
@@ -55,22 +59,24 @@ The same way you can use lots of [Authen::Simple backends](http://search.cpan.or
 
 URLMap allows you to compound multiple apps into one app, so combined with Auth middleware, you can run the same application in a auth vs. non-auth mode, using different paths:
 
-    use Plack::Builder;
-    my $app = sub {
-        my $env = shift;
-        if ($env->{REMOTE_USER}) { 
-            # Authenticated
-        } else {
-            # Unauthenticated
-        }
+```perl
+use Plack::Builder;
+my $app = sub {
+    my $env = shift;
+    if ($env->{REMOTE_USER}) {
+        # Authenticated
+    } else {
+        # Unauthenticated
+    }
+};
+
+builder {
+    mount "/private" => builder {
+        enable "Auth::Basic", authenticator => ...;
+        $app;
     };
-    
-    builder {
-        mount "/private" => builder {
-            enable "Auth::Basic", authenticator => ...;
-            $app;
-        };
-        mount "/public" => $app;
-    };
+    mount "/public" => $app;
+};
+```
 
 This way you run the same `$app` in "/public" and "/private" paths, while "/private" requires a basic authentication and "/public" doesn't. (Inlining `$env->{REMOTE_USER}`, or whatever application logic in .psgi is not really recommended -- i just used it to explain it in an obvious way)

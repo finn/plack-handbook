@@ -8,20 +8,26 @@ Plack::App::Directory is a wrapper around Plack::App::File that gives a director
 
 Using these applications is easy. Just write a .psgi file like this:
 
-    use Plack::App::File;
-    my $app = Plack::App::File->new(root => "$ENV{HOME}/public_html");
+```perl
+use Plack::App::File;
+my $app = Plack::App::File->new(root => "$ENV{HOME}/public_html");
+```
 
 and run it with plackup:
 
-    > plackup file.psgi
+```
+> plackup file.psgi
+```
 
 Now you can access any file under your `~/public_html` with the URL http://localhost:5000/somefile.html
 
 You can also use Plack::App::Directory. This time let's run it with just the plackup command without a .psgi file:
 
-    > plackup -MPlack::App::Directory \
-     -e 'Plack::App::Directory->new(root => "$ENV{HOME}/Sites");
-    HTTP::Server::PSGI: Accepting connections at http://0:5000/
+```
+> plackup -MPlack::App::Directory \
+    -e 'Plack::App::Directory->new(root => "$ENV{HOME}/Sites");
+HTTP::Server::PSGI: Accepting connections at http://0:5000/
+```
 
 The plackup command, like the perl command, accepts flags like `-I` (include path), `-M` (modules to load), and `-e` (the code to eval), so it's easy to load these Plack::App::* applications without ever touching a .psgi file!
 

@@ -4,24 +4,28 @@ The most popular web server environments to run web applications for Perl have b
 
 [CGI::PSGI](http://search.cpan.org/perldoc?CGI::PSGI) is a CGI module subclass that makes it easy to migrate existing CGI.pm based applications to PSGI. Imagine you have the following CGI application:
 
-    use CGI;
+```perl
+use CGI;
 
-    my $q = CGI->new;
-    print $q->header('text/plain'),
-        "Hello ", $q->param('name');
+my $q = CGI->new;
+print $q->header('text/plain'),
+    "Hello ", $q->param('name');
+```
 
 This is a very simple CGI application and converting this to PSGI is easy using the CGI::PSGI module:
 
-    use CGI::PSGI;
+```perl
+use CGI::PSGI;
 
-    my $app = sub {
-        my $env = shift;
-        my $q = CGI::PSGI->new($env);
-        return [
-            $q->psgi_header('text/plain'),
-            [ "Hello ", $q->param('name') ],
-        ];
-    };
+my $app = sub {
+    my $env = shift;
+    my $q = CGI::PSGI->new($env);
+    return [
+        $q->psgi_header('text/plain'),
+        [ "Hello ", $q->param('name') ],
+    ];
+};
+```
 
 `CGI::PSGI->new($env)` takes the PSGI environment hash and creates an instance of CGI::PSGI, which is a subclass of CGI.pm. All methods including `param()`, `query_string`, etc. do the right thing to get the values from the PSGI environment rather than CGI's ENV values.
 

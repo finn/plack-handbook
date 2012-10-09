@@ -1,6 +1,6 @@
 ## Day 21: Lint your application and middleware
 
-We've been talking about [adapting existing web frameworks to PSGI](http://advent.plackperl.org/2009/12/day-8-adapting-web-frameworks-to-psgi.html) and writing a new application using PSGI as an interface, but we haven't talked about error handling. 
+We've been talking about [adapting existing web frameworks to PSGI](http://advent.plackperl.org/2009/12/day-8-adapting-web-frameworks-to-psgi.html) and writing a new application using PSGI as an interface, but we haven't talked about error handling.
 
 ### Handling errors
 
@@ -8,13 +8,17 @@ We have [an awesome stack trace](http://advent.plackperl.org/2009/12/day-3-using
 
 Try this code:
 
-    > plackup -e 'sub { return [ 0, {"Content-Type","text/html"}, "Hello" ] }'
+```
+> plackup -e 'sub { return [ 0, {"Content-Type","text/html"}, "Hello" ] }'
+```
 
 Again, writing a raw PSGI interface is not something end users would do every day, but this could be a good emulation of what would happen if there's a bug in one of middleware components or framework adapters itself.
 
 When you access this application with the browser, the server dies with:
 
-    Not an ARRAY reference at lib/Plack/Util.pm line 145.
+```
+Not an ARRAY reference at lib/Plack/Util.pm line 145.
+```
 
 or something similar. This is because the response format is invalid per the PSGI interface: the status code is not valid, HTTP headers is not an array ref but a hash reference and the response body is a string instead of an array ref.
 
@@ -24,15 +28,19 @@ Checking them in the individual server for every request at a run time is *possi
 
 Middleware::Lint is the middleware to validate request and response interface. Run the application above with the middleware:
 
-    > plackup -e 'enable "Lint"; sub { return [ 0, { "Content-Type"=>"text/html" }, ["Hello"] ] }'
+```
+> plackup -e 'enable "Lint"; sub { return [ 0, { "Content-Type"=>"text/html" }, ["Hello"] ] }'
+```
 
 and now requests for the application would give a nice stack trace saying:
 
-    status code needs to be an integer greater than or equal to 100 at ...
+```
+status code needs to be an integer greater than or equal to 100 at ...
+```
 
 since now the Lint middleware checks if the response in the valid PSGI format.
 
-When you develop a new framework adapter or a middleware component, be sure to check with Middleware::Lint during the development. 
+When you develop a new framework adapter or a middleware component, be sure to check with Middleware::Lint during the development.
 
 ### Writing a new PSGI server
 

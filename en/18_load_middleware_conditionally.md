@@ -15,35 +15,39 @@ We investigated how they deal with situations like this in WSGI and Rack, but co
 
 The Conditional middleware is an ultimate flexible solution to this:
 
-    use Plack::Builder;
-    
-    builder {
-        enable_if { $_[0]->{REMOTE_ADDR} !~ /^192\.168\.0\./ }
-            "Auth::Basic", authenticator => ...;
-        $app;
-    };
+```perl
+use Plack::Builder;
+
+builder {
+    enable_if { $_[0]->{REMOTE_ADDR} !~ /^192\.168\.0\./ }
+        "Auth::Basic", authenticator => ...;
+    $app;
+};
+```
 
 We added a new keyword to Plack::Builder `enable_if`, which takes a block that gets evaluated in the request time (`$_[0]` there is the `$env` hash) and if the block returns true, run the wrapped application but otherwise pass through.
 
 This example code examines if the request comes from a local network and runs a basic authentication otherwise.
 
 Conditional is implemented as a normal piece of middleware, and internally this is equivalent to:
-    
-    use Plack::Middleware::Conditional;
-    use Plack::Middleware::Auth::Basic;
-    
-    my $app = sub { ... };
-    
-    $app = Plack::Middleware::Conditional->wrap($app,
-        builder => sub {
-            Plack::Middleware::Auth::Basic->wrap(
-                $_[0], authenticator => ...,
-            );
-        },
-        condition => sub {
-            my $env = shift;
-            $env->{REMOTE_ADDR} !~ /^192\.168\.0\./;
-        },
-    );
+
+```perl
+use Plack::Middleware::Conditional;
+use Plack::Middleware::Auth::Basic;
+
+my $app = sub { ... };
+
+$app = Plack::Middleware::Conditional->wrap($app,
+    builder => sub {
+        Plack::Middleware::Auth::Basic->wrap(
+            $_[0], authenticator => ...,
+        );
+    },
+    condition => sub {
+        my $env = shift;
+        $env->{REMOTE_ADDR} !~ /^192\.168\.0\./;
+    },
+);
+```
 
 But it's a little boring to write, so we added a DSL version, which I recommend to use :)

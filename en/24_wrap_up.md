@@ -24,6 +24,6 @@ We're chatting on IRC channel #plack on irc.perl.org and there's a [mailing list
 
 ### On a final note...
 
-It's been an interesting experiment of writing 24 articles for 24 days, and I'm glad that I finished this myself. Next year, i'm looking forward to having your own advent entries to make the community based advent calendar. 
+It's been an interesting experiment of writing 24 articles for 24 days, and I'm glad that I finished this myself. Next year, i'm looking forward to having your own advent entries to make the community based advent calendar.
 
 I wish you a Very Merry Christmas and a Happy New Year.

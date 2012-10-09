@@ -6,10 +6,12 @@ Christmas is coming near and there aren't enough days to explore more middleware
 
 When you die out from an application or display some "Forbidden" error message when an auth wasn't successful you'll probably want to display a custom error page based on the response status code. ErrorDocument is exactly the middleware that does this, like Apache's ErrorDocument directive.
 
-    builder {
-        enable "ErrorDocument", 500 => "/path/to/error.html";
-        $app;
-    };
+```perl
+builder {
+    enable "ErrorDocument", 500 => "/path/to/error.html";
+    $app;
+};
+```
 
 You can just map arbitrary error code to a static file path to be served. You can enable StackTrace middleware during the development and then this ErrorDocument middleware on the production so as to display nicer error pages.
 
@@ -17,24 +19,28 @@ This middleware is included in the Plack core distribution.
 
 ### Session
 
-Actually this is (again) a steal from [Rack](http://rack.rubyforge.org/). Rack defines `rack.session` as a standard Rack environment hash and defines the interface as Ruby's built-in Hash object. We didn't define it as part of the standard interface but stole the idea and actual implementation a lot. 
+Actually this is (again) a steal from [Rack](http://rack.rubyforge.org/). Rack defines `rack.session` as a standard Rack environment hash and defines the interface as Ruby's built-in Hash object. We didn't define it as part of the standard interface but stole the idea and actual implementation a lot.
 
-     builder {
-         enable "Session", store => "File";
-         $qpp;
-     };
+```perl
+builder {
+    enable "Session", store => "File";
+    $qpp;
+};
+```
 
 By default Session will save the session in on-memory hash, which wouldn't work with the prefork (or multi process) servers. It's shipped with a couple of default store engines such as [CHI](http://search.cpan.org/perldoc?CHI), so it's so easy to adapt to other storage engines, exactly like we see with other middleware components such as Auth.
 
 Session data is stored as a plain hash reference in `psgix.session` key in the PSGI env hash. Application and frameworks with access to PSGI env hash can use this Session freely in the app by wrapping it with Plack::Session module, like in Tatsumaki:
 
-     # Tatsumaki app
-     sub get {
-         my $self = shift;
-         my $uid = $self->request->session->get('uid');
-         $self->request->session->set(last_access => time);
-         ...
-     }
+```perl
+# Tatsumaki app
+sub get {
+    my $self = shift;
+    my $uid = $self->request->session->get('uid');
+    $self->request->session->set(last_access => time);
+    ...
+}
+```
 
 And the nice thing is that *any* PSGI apps can share this session data as long as they use the same storage etc. Some existing framework adapters don't have an access to this environment hash from end users application yet, so it should be updated gradually in the near future.
 
@@ -46,10 +52,12 @@ This is a steal from [Rack-bug](http://github.com/brynary/rack-bug) and [django 
 
 The panels include Timer (the request time), Memory (how is memory increased if there's any leaks), Request (Detailed request headers) and Responses (Response headers etc.) and so on.
 
-     builder {
-         enable "Debug";
-         $app;
-     };
+```perl
+builder {
+    enable "Debug";
+    $app;
+};
+```
 
 Using it is so easy as this, and you an also pass the list of `panels` to enable only certain panels or additional non default panels.
 
@@ -61,14 +69,16 @@ It's often useful to proxy HTTP requests to another application, either running 
 
 Anyway, Plack::App::Proxy is the middleware to do this:
 
-    use Plack::App::Proxy;
-    use Plack::Builder;
-    
-    my $app = Plack::App::Proxy->new(host => '192.168.0.2:8080')->to_app;
-    
-    builder {
-        mount "/app" => $app;
-    };
+```perl
+use Plack::App::Proxy;
+use Plack::Builder;
+
+my $app = Plack::App::Proxy->new(host => '192.168.0.2:8080')->to_app;
+
+builder {
+    mount "/app" => $app;
+};
+```
 
 Proxy middleware is developed by Lee Aylward on [github](http://github.com/leedo/Plack-App-Proxy).
 

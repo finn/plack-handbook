@@ -10,45 +10,49 @@ Cascading can be useful if you have a couple of applications and runs in order, 
 
 Plack::App::Cascade allows you to composite multiple applications in order and runs until it returns non-404 responses.
 
-    use Plack::App::Cascade;
-    use Plack::App::File;
-    use Plack::App::URLMap;
-    
-    my @paths = qw(
-        /home/www/static
-        /virtualhost/example.com/htdocs/static
-        /users/miyagawa/public_html/images
-    );
-    
-    my $app = Plack::App::Cascade->new;
-    for my $path (@paths) {
-        my $file = Plack::App::File->new(root => $path);
-        $app->add($file);
-    }
-    
-    my $map = Plack::App::URLMap->new;
-    $map->mount("/static" => $app);
-    $map->to_app;
+```perl
+use Plack::App::Cascade;
+use Plack::App::File;
+use Plack::App::URLMap;
+
+my @paths = qw(
+    /home/www/static
+    /virtualhost/example.com/htdocs/static
+    /users/miyagawa/public_html/images
+);
+
+my $app = Plack::App::Cascade->new;
+for my $path (@paths) {
+    my $file = Plack::App::File->new(root => $path);
+    $app->add($file);
+}
+
+my $map = Plack::App::URLMap->new;
+$map->mount("/static" => $app);
+$map->to_app;
+```
 
 This application is mapped to `/static` using URLMap, and all requests will try the three directories specified in `@paths` using App::File application and returns the first found  files. It might be useful if you want to serve static files but want to cascade from multiple directories like this.
 
 ### Cascade different apps
 
-    use CatalystApp;
-    CatalystApp->setup_engine('PSGI');
-    my $app1 = sub { CatalystApp->run(@_) };
-    
-    use CGI::Application::PSGI;
-    use CGIApp;
-    my $app2 = sub {
-        my $app = CGIApp->new({
-            QUERY => CGI::PSGI->new($_[0]),
-        });
-        CGI::Application::PSGI->run($app);
-    };
-    
-    use Plack::App::Cascade;
-    Plack::App::Cascade->new(apps => [ $app1, $app2 ])->to_app;
+```perl
+use CatalystApp;
+CatalystApp->setup_engine('PSGI');
+my $app1 = sub { CatalystApp->run(@_) };
+
+use CGI::Application::PSGI;
+use CGIApp;
+my $app2 = sub {
+    my $app = CGIApp->new({
+        QUERY => CGI::PSGI->new($_[0]),
+    });
+    CGI::Application::PSGI->run($app);
+};
+
+use Plack::App::Cascade;
+Plack::App::Cascade->new(apps => [ $app1, $app2 ])->to_app;
+```
 
 This will create two applications, one with Catalyst and the other with CGI::Application and runs two applications in order. Suppose you have an overlapping URL structure and `/what/ever.cat` served with the Catalyst application and `/what/ever.cgiapp` served with the CGI::Application app.
 

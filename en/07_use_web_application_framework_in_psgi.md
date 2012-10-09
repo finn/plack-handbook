@@ -8,14 +8,16 @@ Mark Stosberg, the current maintainer of CGI::Application, and I have been colla
 
 All you have to do is install CGI::Application::PSGI from CPAN and write a .psgi file that looks like this:
 
-    use CGI::Application::PSGI;
-    use WebApp;
+```perl
+use CGI::Application::PSGI;
+use WebApp;
 
-    my $app = sub {
-        my $env = shift;
-        my $app = WebApp->new({ QUERY => CGI::PSGI->new($env) });
-        CGI::Application::PSGI->run($app);
-    };
+my $app = sub {
+    my $env = shift;
+    my $app = WebApp->new({ QUERY => CGI::PSGI->new($env) });
+    CGI::Application::PSGI->run($app);
+};
+```
 
 Then use [plackup](http://advent.plackperl.org/2009/12/day-3-using-plackup.html) to run the application with a standalone server or any of the other backends.
 

@@ -6,23 +6,27 @@
 
 The way you use Plack::Builder is so easy. Just use the keywords `builder` and `enable`:
 
-    my $app = sub { 
-        return [ 200, [], [ "Hello World" ] ];
-    };
-    
-    use Plack::Builder;
-    builder {
-        enable "JSONP";
-        enable "Auth::Basic", authenticator => sub { ... };
-        enable "Deflater";
-        $app;
-    };
+```perl
+my $app = sub {
+    return [ 200, [], [ "Hello World" ] ];
+};
+
+use Plack::Builder;
+builder {
+    enable "JSONP";
+    enable "Auth::Basic", authenticator => sub { ... };
+    enable "Deflater";
+    $app;
+};
+```
 
 This takes the original application (`$app`) and wraps it with Deflater, Auth::Basic and JSONP middleware components (inner to outer). So it's equivalent to:
 
-    $app = Plack::Middleware::Deflater->wrap($app);
-    $app = Plack::Middleware::Auth::Basic->wrap($app, authenticator => sub { });
-    $app = Plack::Middleware::JSONP->wrap($app);
+```perl
+$app = Plack::Middleware::Deflater->wrap($app);
+$app = Plack::Middleware::Auth::Basic->wrap($app, authenticator => sub { });
+$app = Plack::Middleware::JSONP->wrap($app);
+```
 
 but without lots of `use`ing the module which is anti DRY.
 
@@ -32,7 +36,9 @@ Notice that the order of middleware wrapping is in reverse? The builder/enable D
 
 `enable` takes the middleware name without the Plack::Middleware:: prefix but in case you want to enable some other namespace, like MyFramework::PSGI::MW::Foo, you can say:
 
-    enable "+MyFramework::PSGI::MW::Foo";
+```perl
+enable "+MyFramework::PSGI::MW::Foo";
+```
 
 the key here is to use the plus (+) sign to indicate that it is a fully qualified class name.
 
