@@ -6,7 +6,7 @@ Middleware is a concept in PSGI (as always, stolen from Python's WSGI and Ruby's
 
 ![WSGI middleware onion](../images/pylons_as_onion.png)
 
-(Image courtesy of Pylons project for Python WSGI)
+(Image courtesy of Pylons project for Python WSGI.)
 
 This picture illustrates the middleware concept very well. The PSGI application is in the core of the onion layers and middleware components wrap the original application. They preprocess as a request comes in (outer to inner) and then postprocess as a response goes out (inner to outer).
 
