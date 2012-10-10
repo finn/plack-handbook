@@ -8,13 +8,13 @@ Middleware is a concept in PSGI (as always, stolen from Python's WSGI and Ruby's
 
 (Image courtesy of Pylons project for Python WSGI)
 
-This picture illustrates the middleware concept very well. The PSGI application is in the core of the onion layers, and middleware components wrap the original application. They preprocess as a request comes in (outer to inner) and then postprocess the response as a response goes out (inner to outer).
+This picture illustrates the middleware concept very well. The PSGI application is in the core of the onion layers and middleware components wrap the original application. They preprocess as a request comes in (outer to inner) and then postprocess as a response goes out (inner to outer).
 
 Lots of functionality can be added to a PSGI application by wrapping it in a middleware component: HTTP authentication, capturing errors to log output, wrapping JSON output with JSONP, etc.
 
 ### Plack::Middleware
 
-[Plack::Middleware](http://search.cpan.org/perldoc?Plack::Middleware) is a base class for middleware components that allows you to write middleware in a really simple and reusable fashion.
+[Plack::Middleware](http://search.cpan.org/perldoc?Plack::Middleware) is a base class for middleware components that allows you to write middleware in a simple and reusable fashion.
 
 Using middleware components written with Plack::Middleware is easy, just wrap the original application with the `wrap` method:
 
@@ -23,9 +23,9 @@ Using middleware components written with Plack::Middleware is easy, just wrap th
     use Plack::Middleware::StackTrace;
     $app = Plack::Middleware::StackTrace->wrap($app);
 
-This example wraps the original application with StackTrace middleware (which is actually enabled [by default using plackup](http://advent.plackperl.org/2009/12/day-3-using-plackup.html)) with the `wrap` method. When the wrapped application throws an error the middleware component catches the error and [displays a beautiful HTML page](http://bulknews.typepad.com/blog/2009/10/develstacktraceashtml.html) using Devel::StackTrace::AsHTML.
+This example wraps the original application with the StackTrace middleware (which is actually enabled [by default using plackup](http://advent.plackperl.org/2009/12/day-3-using-plackup.html)) using the `wrap` method. When the wrapped application throws an error the middleware component catches the error and [displays a beautiful HTML page](http://bulknews.typepad.com/blog/2009/10/develstacktraceashtml.html) using Devel::StackTrace::AsHTML.
 
-Some middleware components take parameters which you can pass as a hash after `$app`:
+Some middleware components take parameters, passed as a hash after `$app`:
 
     my $app = sub { ... };
 
@@ -65,4 +65,4 @@ The beauty of middleware is that it can wrap *any* PSGI application. It might no
         $app;
     };
 
-This will enable the Basic authentication middleware to CGI::Application based application. You can do the same with [any other frameworks that supports PSGI](http://plackperl.org/#frameworks).
+This will enable the Basic authentication middleware for a CGI::Application based application. You can do the same with [any other frameworks that supports PSGI](http://plackperl.org/#frameworks).

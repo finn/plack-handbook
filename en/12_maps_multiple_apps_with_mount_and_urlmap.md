@@ -32,7 +32,7 @@ We have two apps, one to say hi to John and another to Bob, and we want to run t
 
 There you go. The app now dispatches all requests beginning with `/john` to `$app1` which says "Hello John" and `/bob` to `$app2`, which says "Hello Bob". As a result, all requests to unmapped paths such as root ("/") give a 404.
 
-Environment variables such as `PATH_INFO` and `SCRIPT_NAME` are automatically adjusted so it just works just like when your application is mounted using Apache's mod_alias or CGI scripts. Your application framework should always use `PATH_INFO` to dispatch requests and concatenate with `SCRIPT_NAME` to build links.
+Environment variables such as `PATH_INFO` and `SCRIPT_NAME` are automatically adjusted so it works just like when your application is mounted using Apache's mod_alias or CGI scripts. Your application framework should always use `PATH_INFO` to dispatch requests and concatenate with `SCRIPT_NAME` to build links.
 
 ### mount in DSL
 
