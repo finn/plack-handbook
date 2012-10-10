@@ -32,7 +32,7 @@ Some middleware components take parameters, passed as a hash after `$app`:
     use Plack::Middleware::MethodOverride;
     $app = Plack::Middleware::MethodOverride->wrap($app, header => 'X-Method');
 
-Installing multiple middleware components is tedious especially since you need to `use` those modules first, but we have a quick solution for that using a DSL style syntax.
+Installing multiple middleware components is tedious, especially since you need to `use` those modules first, but we have a quick solution for that using a DSL style syntax.
 
     use Plack::Builder;
     my $app = sub { ... };

@@ -1,6 +1,6 @@
 ## Day 11: Using Plack::Builder
 
-[Yesterday](http://advent.plackperl.org/2009/12/day-10-using-plack-middleware.html) we saw how to enable Plack middleware components in a .psgi file using the `wrap` method. But the the technique of loading the middle ware with `use` and then wrapping the `$app` with `wrap` is tedious and not very intuitive. So we have a DSL (Domain Specific Language) called Plack::Builder to make it much easier.
+[Yesterday](http://advent.plackperl.org/2009/12/day-10-using-plack-middleware.html) we saw how to enable Plack middleware components in a .psgi file using the `wrap` method. But the the technique of loading the middleware with `use` and then wrapping the `$app` with `wrap` is tedious and not very intuitive. So we have a DSL (domain specific language) called Plack::Builder to make it much easier.
 
 ### Using Plack::Builder
 
@@ -18,7 +18,7 @@ Using Plack::Builder is easy. Just use the keywords `builder` and `enable`:
         $app;
     };
 
-This takes the original application (`$app`) and wraps it with Deflater, Auth::Basic, and JSONP middleware components (inner to outer). It's equivalent to:
+This takes the original application (`$app`) and wraps it with the Deflater, Auth::Basic, and JSONP middleware components (inner to outer). It's equivalent to:
 
     $app = Plack::Middleware::Deflater->wrap($app);
     $app = Plack::Middleware::Auth::Basic->wrap($app, authenticator => sub { });
