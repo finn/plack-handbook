@@ -1,12 +1,12 @@
 ## Day 14: Use Plack::Request
 
-Plack is not a framework per se, but is more of a toolkit that contains PSGI server implementations as well as utilities like [plackup](http://advent.plackperl.org/2009/12/day-3-using-plackup.html), [Plack::Test](http://advent.plackperl.org/2009/12/day-13-use-placktest-to-test-your-application.html) and [Middleware components](http://advent.plackperl.org/2009/12/day-10-using-plack-middleware.html). 
+Plack is not a framework per se, but is more of a toolkit that contains PSGI server implementations as well as utilities like [plackup](http://advent.plackperl.org/2009/12/day-3-using-plackup.html), [Plack::Test](http://advent.plackperl.org/2009/12/day-13-use-placktest-to-test-your-application.html) and [Middleware components](http://advent.plackperl.org/2009/12/day-10-using-plack-middleware.html).
 
-Since Plack project is a revolution from [HTTP::Engine](http://search.cpan.org/perldoc?HTTP::Engine), there seems a demand to write a quick web application in Request/Response style handler API. Plack::Request gives you a nice Object Oriented API around PSGI environment hash and response array, just like Rack's Rack::Request and Response objects. It could also be used as a library when writing a new middleware component, and a base class for requests/responses when you write a new web application framework based on Plack.
+Since the Plack project is an evolution of [HTTP::Engine](http://search.cpan.org/perldoc?HTTP::Engine) there seems to be a demand to write quick web applications using a Request/Response style handler API. Plack::Request gives you a nice object oriented API around the PSGI environment hash and response array just like Rack's Rack::Request and Response objects. It could also be used as a library when writing a new middleware component or as a base class for requests/responses when you write a new web application framework based on Plack.
 
 ### Use Plack::Request and Response
 
-Plack::Request is a wrapper around PSGI environment, and the code goes like this:
+Plack::Request is a wrapper around the PSGI environment, using it looks like this:
 
     use Plack::Request;
     
@@ -21,9 +21,9 @@ Plack::Request is a wrapper around PSGI environment, and the code goes like this
         return $res->finalize;
     };
 
-The only thing you need to change, if you're migrating from HTTP::Engine, is the first line of the application to create a Plack::Request out of PSGI env (`shift`) and then call `finalize` to get an array reference out of Response object.
+The only things you need to change if you're migrating from HTTP::Engine is the first line of the application to create a Plack::Request out of PSGI env (`shift`) and adding the call to  `finalize` to get an array reference out of the Response object.
 
-Many other methods like `path_info`, `uri`, `param`, `redirect` etc. work like HTTP::Engine::Request and Response object which is very similar to [Catalyst](http://search.cpan.org/dist/Catalyst-Runtime) 's Request and Response object.
+Many other methods like `path_info`, `uri`, `param`, `redirect`, etc. work like HTTP::Engine::Request and Response objects which are very similar to [Catalyst](http://search.cpan.org/dist/Catalyst-Runtime) 's Request and Response objects.
 
 ### Plack::Request and Plack
 
@@ -31,6 +31,6 @@ Plack::Request is available as part of Plack on CPAN. Your framework can use Pla
 
 ### Use Plack::Request or not?
 
-Directly using Plack::Request in the `.psgi` code is quite handy to quickly write and test your code but not really recommended for a large scale application. It's exactly like writing a 1000 lines of `.cgi` script where you could factor out the application code into a module (`.pm` files). The same thing applies to `.psgi` file: it's best to create an application class by using and possibly extending Plack::Request, and then have just a few lines of code in `.psgi` file with [Plack::Builder to configure middleware components](http://advent.plackperl.org/2009/12/day-11-using-plackbuilder.html).
+Directly using Plack::Request in the `.psgi` code is quite handy to quickly write and test your code but not really recommended for a large scale application. It's exactly like writing a 1000 lines of `.cgi` script when you could factor out the application code into a module (`.pm` files). The same thing applies to a `.psgi` file: it's best to create an application class by using and possibly extending Plack::Request, and then have just a few lines of code in the `.psgi` file with [Plack::Builder to configure middleware components](http://advent.plackperl.org/2009/12/day-11-using-plackbuilder.html).
 
-Plack::Request is also supposed to be used from a web application framework to [adapt to PSGI interface](http://advent.plackperl.org/2009/12/day-8-adapting-web-frameworks-to-psgi.html).
+Plack::Request is also supposed to be used from web application frameworks to [adapt to the PSGI interface](http://advent.plackperl.org/2009/12/day-8-adapting-web-frameworks-to-psgi.html).
